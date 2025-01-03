@@ -148,7 +148,7 @@ def main():
 
         SELECT td.time as day
         , td.total_users-nu.new_users AS returning_addresses
-        , nu.new_addresses
+        , nu.new_users as new_addresses
         , AVG(td.total_users) OVER(ORDER BY td.time ROWS BETWEEN 30 PRECEDING AND CURRENT ROW) AS users_30d_moving_average
         FROM total_data td
         LEFT JOIN new_users nu ON td.time=nu.time
