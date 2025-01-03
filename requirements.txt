@@ -2,3 +2,4 @@ dune-client
 pyyaml
 python-dotenv
 pandas
+snowflake-connector-python
