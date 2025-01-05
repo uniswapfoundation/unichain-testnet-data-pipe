@@ -221,35 +221,35 @@ def main():
     """
 
     query_gas_guzzlers = """
-        with data AS (
-            SELECT txs.to_address AS address
-            , SUM(txs.receipt_effective_gas_price * txs.receipt_gas_used / POWER(10, 18)) AS gas_used -- l2_fees
-            , COUNT(distinct txs.from_address) AS address_that_interacted
-            , CAST(COUNT(*) AS double) AS tx_count
-            FROM transactions txs
-            WHERE BLOCK_TIMESTAMP >= DATEADD(day, -7, CURRENT_TIMESTAMP)
-                and txs.receipt_effective_gas_price > 0 -- filter out system transactions if we are doing revenue
-            GROUP BY 1
-            ORDER BY 2 DESC
-            LIMIT 10000
+    with data AS (
+        SELECT coalesce(txs.to_address, txs.RECEIPT_CONTRACT_ADDRESS) AS address
+        , SUM(txs.receipt_effective_gas_price * txs.receipt_gas_used / POWER(10, 18)) AS gas_used -- l2_fees
+        , COUNT(distinct txs.from_address) AS address_that_interacted
+        , CAST(COUNT(*) AS double) AS tx_count
+        FROM transactions txs
+        WHERE BLOCK_TIMESTAMP >= DATEADD(day, -7, CURRENT_TIMESTAMP)
+            and txs.receipt_effective_gas_price > 0 -- filter out system transactions if we are doing revenue
+        GROUP BY 1
+        ORDER BY 2 DESC
+        LIMIT 10000
+    )
+
+    , total AS (
+        SELECT SUM(txs.receipt_effective_gas_price * txs.receipt_gas_used / POWER(10, 18)) AS gas_used
+        , CAST(COUNT(*) AS double) AS tx_count
+        FROM transactions txs
+        WHERE BLOCK_TIMESTAMP >= DATEADD(day, -7, CURRENT_TIMESTAMP)
+            and txs.receipt_effective_gas_price > 0 -- filter out system transactions if we are doing revenue
         )
 
-        , total AS (
-            SELECT SUM(txs.receipt_effective_gas_price * txs.receipt_gas_used / POWER(10, 18)) AS gas_used
-            , CAST(COUNT(*) AS double) AS tx_count
-            FROM transactions txs
-            WHERE BLOCK_TIMESTAMP >= DATEADD(day, -7, CURRENT_TIMESTAMP)
-                and txs.receipt_effective_gas_price > 0 -- filter out system transactions if we are doing revenue
-            )
-
-        SELECT ROW_NUMBER() OVER (ORDER BY d.gas_used DESC) AS ranking
-            , address
-            , d.gas_used
-            , d.address_that_interacted
-            , d.gas_used/(SELECT SUM(gas_used) FROM total) AS percentage_of_gas_used
-            , d.tx_count
-            , d.tx_count/(SELECT SUM(tx_count) FROM total) AS percentage_of_txs
-        FROM data d
+    SELECT ROW_NUMBER() OVER (ORDER BY d.gas_used DESC) AS ranking
+        , address
+        , d.gas_used
+        , d.address_that_interacted
+        , d.gas_used/(SELECT SUM(gas_used) FROM total) AS percentage_of_gas_used
+        , d.tx_count
+        , d.tx_count/(SELECT SUM(tx_count) FROM total) AS percentage_of_txs
+    FROM data d
     """
     
     query_gas_spenders = """
