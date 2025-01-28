@@ -305,42 +305,42 @@ def main():
     upload_success = dune.upload_csv(
         table_name="unichain_sepolia_general_metrics",
         data=df_general_metrics.to_csv(index=False),
-        is_private=False
+        is_private=True
     )
     print("Uploaded General Metrics successfully:", upload_success)
     
     upload_success = dune.upload_csv(
         table_name="unichain_sepolia_new_and_returning_eoas",
         data=df_new_and_returning_eoas.to_csv(index=False),
-        is_private=False
+        is_private=True
     )
     print("Uploaded new and returning EOAs successfully:", upload_success)
 
     upload_success = dune.upload_csv(
         table_name="unichain_sepolia_new_and_returning_deployers",
         data=df_new_and_returning_deployers.to_csv(index=False),
-        is_private=False
+        is_private=True
     )
     print("Uploaded new and returning deployers successfully:", upload_success)
 
     upload_success = dune.upload_csv(
         table_name="unichain_sepolia_gas_metrics",
         data=df_gas_metrics.to_csv(index=False),
-        is_private=False
+        is_private=True
     )
     print("Uploaded Gas Metrics successfully:", upload_success)
 
     upload_success = dune.upload_csv(
         table_name="unichain_sepolia_gas_guzzlers",
         data=df_gas_guzzlers.to_csv(index=False),
-        is_private=False
+        is_private=True
     )
     print("Uploaded Gas Guzzlers successfully:", upload_success)
 
     upload_success = dune.upload_csv(
         table_name="unichain_sepolia_gas_spenders",
         data=df_gas_spenders.to_csv(index=False),
-        is_private=False
+        is_private=True
     )
     print("Uploaded Gas Spenders successfully:", upload_success)
     
