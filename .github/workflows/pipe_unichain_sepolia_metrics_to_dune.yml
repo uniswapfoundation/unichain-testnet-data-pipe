@@ -47,4 +47,6 @@ jobs:
           SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
           SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
           SNOWFLAKE_PRIVATE_KEY_PATH: rsa_key.der
-        run: python -u scripts/pipe_unichain_testnet_data.py
+        run: |
+          echo "SNOWFLAKE_ACCOUNT: $SNOWFLAKE_ACCOUNT" 
+          python -u scripts/pipe_unichain_testnet_data.py
