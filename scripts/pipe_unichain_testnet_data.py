@@ -6,19 +6,19 @@ from dotenv import load_dotenv
 from dune_client.client import DuneClient
 
 def load_env_variables():
-    dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-    # Clear the existing environment variables to force reloading
-    for key in ["SNOWFLAKE_USER", "SNOWFLAKE_ACCOUNT", "SNOWFLAKE_WAREHOUSE", "SNOWFLAKE_DATABASE", "SNOWFLAKE_SCHEMA"]:
-        os.environ.pop(key, None)
-    load_dotenv(dotenv_path)
+    # dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+    # # Clear the existing environment variables to force reloading
+    # for key in ["SNOWFLAKE_USER", "SNOWFLAKE_ACCOUNT", "SNOWFLAKE_WAREHOUSE", "SNOWFLAKE_DATABASE", "SNOWFLAKE_SCHEMA"]:
+    #     os.environ.pop(key, None)
+    # load_dotenv(dotenv_path)
 
     credentials = {
-        'USER': os.environ.get('SNOWFLAKE_USER'),
-        'ACCOUNT': os.environ.get('SNOWFLAKE_ACCOUNT'),
-        'WAREHOUSE': os.environ.get('SNOWFLAKE_WAREHOUSE'),
-        'DATABASE': os.environ.get('SNOWFLAKE_DATABASE'),
-        'SCHEMA': os.environ.get('SNOWFLAKE_SCHEMA'),
-        'PRIVATE_KEY_PATH': os.environ.get('SNOWFLAKE_PRIVATE_KEY_PATH')
+        'USER': os.getenv('SNOWFLAKE_USER'),
+        'ACCOUNT': os.getenv('SNOWFLAKE_ACCOUNT'),
+        'WAREHOUSE': os.getenv('SNOWFLAKE_WAREHOUSE'),
+        'DATABASE': os.getenv('SNOWFLAKE_DATABASE'),
+        'SCHEMA': os.getenv('SNOWFLAKE_SCHEMA'),
+        'PRIVATE_KEY_PATH': os.getenv('SNOWFLAKE_PRIVATE_KEY_PATH')
     }
 
     # Debugging: Print loaded values
