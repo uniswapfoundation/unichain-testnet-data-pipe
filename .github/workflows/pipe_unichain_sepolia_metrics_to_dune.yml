@@ -23,6 +23,12 @@ jobs:
           pwd
           ls -R
 
+      - name: Debug Environment Variables
+        run: |
+          echo "SNOWFLAKE_ACCOUNT: $SNOWFLAKE_ACCOUNT"
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+
       - name: Decode Private Key
         run: echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY_DER }}" | base64 --decode > rsa_key.der
 
