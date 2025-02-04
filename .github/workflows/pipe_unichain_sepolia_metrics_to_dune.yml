@@ -23,12 +23,6 @@ jobs:
           pwd
           ls -R
 
-      - name: Debug Environment Variables
-        run: |
-          echo "SNOWFLAKE_ACCOUNT: $SNOWFLAKE_ACCOUNT"
-        env:
-          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-
       - name: Decode Private Key
         run: echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY_DER }}" | base64 --decode > rsa_key.der
 
@@ -47,6 +41,4 @@ jobs:
           SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
           SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
           SNOWFLAKE_PRIVATE_KEY_PATH: rsa_key.der
-        run: |
-          echo "SNOWFLAKE_ACCOUNT: $SNOWFLAKE_ACCOUNT" 
-          python -u scripts/pipe_unichain_testnet_data.py
+        run: python -u scripts/pipe_unichain_testnet_data.py

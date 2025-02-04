@@ -10,11 +10,9 @@ def load_env_variables():
     # Clear the existing environment variables to force reloading
     for key in ["SNOWFLAKE_USER", "SNOWFLAKE_ACCOUNT", "SNOWFLAKE_WAREHOUSE", "SNOWFLAKE_DATABASE", "SNOWFLAKE_SCHEMA"]:
         os.environ.pop(key, None)
-    # Debugging: Print all environment variables loaded
     load_dotenv(dotenv_path)
-    print("Loaded environment variables from .env")
 
-    credentials = {
+    return {
         'USER': os.environ.get('SNOWFLAKE_USER'),
         'ACCOUNT': os.environ.get('SNOWFLAKE_ACCOUNT'),
         'WAREHOUSE': os.environ.get('SNOWFLAKE_WAREHOUSE'),
@@ -22,25 +20,20 @@ def load_env_variables():
         'SCHEMA': os.environ.get('SNOWFLAKE_SCHEMA'),
         'PRIVATE_KEY_PATH': os.environ.get('SNOWFLAKE_PRIVATE_KEY_PATH')
     }
-    
-    # Debugging: Print loaded values
-    print("Loaded credentials:", credentials)
-
-    return credentials
 
 def start_snowflake_connection(credentials):
-    private_key_path = os.path.expanduser(credentials['PRIVATE_KEY_PATH'])  # Ensure correct path
+    private_key_path = os.path.expanduser(credentials['PRIVATE_KEY_PATH'])  # Expands ~ to full path
 
     with open(private_key_path, 'rb') as key_file:
-        private_key = key_file.read()  # Read in binary mode
-
+        private_key = key_file.read()
+        
     return snowflake.connector.connect(
         user=credentials['USER'],
         account=credentials['ACCOUNT'],
         warehouse=credentials['WAREHOUSE'],
         database=credentials['DATABASE'],
         schema=credentials['SCHEMA'],
-        private_key=private_key  # Ensure correct format
+        private_key=private_key
     )
 
 def close_snowflake_connection(conn):
