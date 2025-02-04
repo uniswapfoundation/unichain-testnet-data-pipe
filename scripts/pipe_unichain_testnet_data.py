@@ -12,7 +12,7 @@ def load_env_variables():
         os.environ.pop(key, None)
     load_dotenv(dotenv_path)
 
-    return {
+    credentials = {
         'USER': os.environ.get('SNOWFLAKE_USER'),
         'ACCOUNT': os.environ.get('SNOWFLAKE_ACCOUNT'),
         'WAREHOUSE': os.environ.get('SNOWFLAKE_WAREHOUSE'),
@@ -20,6 +20,10 @@ def load_env_variables():
         'SCHEMA': os.environ.get('SNOWFLAKE_SCHEMA'),
         'PRIVATE_KEY_PATH': os.environ.get('SNOWFLAKE_PRIVATE_KEY_PATH')
     }
+
+    # Debugging: Print loaded values
+    print("Loaded credentials:", credentials)
+    return credentials
 
 def start_snowflake_connection(credentials):
     private_key_path = os.path.expanduser(credentials['PRIVATE_KEY_PATH'])  # Expands ~ to full path
