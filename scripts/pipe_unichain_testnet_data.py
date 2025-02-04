@@ -8,7 +8,7 @@ from dune_client.client import DuneClient
 def load_env_variables():
     dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
     # Clear the existing environment variables to force reloading
-    for key in ["SNOWFLAKE_USER", "SNOWFLAKE_PASSWORD", "SNOWFLAKE_ACCOUNT", "SNOWFLAKE_WAREHOUSE", "SNOWFLAKE_DATABASE", "SNOWFLAKE_SCHEMA"]:
+    for key in ["SNOWFLAKE_USER", "SNOWFLAKE_ACCOUNT", "SNOWFLAKE_WAREHOUSE", "SNOWFLAKE_DATABASE", "SNOWFLAKE_SCHEMA"]:
         os.environ.pop(key, None)
     load_dotenv(dotenv_path)
 
