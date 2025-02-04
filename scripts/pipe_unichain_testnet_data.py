@@ -7,25 +7,33 @@ from dune_client.client import DuneClient
 
 def load_env_variables():
     dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+    # Clear the existing environment variables to force reloading
+    for key in ["SNOWFLAKE_USER", "SNOWFLAKE_PASSWORD", "SNOWFLAKE_ACCOUNT", "SNOWFLAKE_WAREHOUSE", "SNOWFLAKE_DATABASE", "SNOWFLAKE_SCHEMA"]:
+        os.environ.pop(key, None)
     load_dotenv(dotenv_path)
 
     return {
         'USER': os.environ.get('SNOWFLAKE_USER'),
-        'PASSWORD': os.environ.get('SNOWFLAKE_PASSWORD'),
         'ACCOUNT': os.environ.get('SNOWFLAKE_ACCOUNT'),
         'WAREHOUSE': os.environ.get('SNOWFLAKE_WAREHOUSE'),
         'DATABASE': os.environ.get('SNOWFLAKE_DATABASE'),
-        'SCHEMA': os.environ.get('SNOWFLAKE_SCHEMA')
+        'SCHEMA': os.environ.get('SNOWFLAKE_SCHEMA'),
+        'PRIVATE_KEY_PATH': os.environ.get('SNOWFLAKE_PRIVATE_KEY_PATH')
     }
 
 def start_snowflake_connection(credentials):
+    private_key_path = os.path.expanduser(credentials['PRIVATE_KEY_PATH'])  # Ensure correct path
+
+    with open(private_key_path, 'rb') as key_file:
+        private_key = key_file.read()  # Read in binary mode
+
     return snowflake.connector.connect(
         user=credentials['USER'],
-        password=credentials['PASSWORD'],
         account=credentials['ACCOUNT'],
         warehouse=credentials['WAREHOUSE'],
         database=credentials['DATABASE'],
-        schema=credentials['SCHEMA']
+        schema=credentials['SCHEMA'],
+        private_key=private_key  # Ensure correct format
     )
 
 def close_snowflake_connection(conn):

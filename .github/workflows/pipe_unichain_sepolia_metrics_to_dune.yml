@@ -23,6 +23,12 @@ jobs:
           pwd
           ls -R
 
+      - name: Decode Private Key
+        run: echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY_DER }}" | base64 --decode > rsa_key.der
+
+      - name: Set Private Key Permissions
+        run: chmod 600 rsa_key.der
+
       - name: pip requirements
         run: pip install -r requirements.txt
 
@@ -30,9 +36,9 @@ jobs:
         env:
           DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
-          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
           SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+          SNOWFLAKE_PRIVATE_KEY_PATH: rsa_key.der
         run: python -u scripts/pipe_unichain_testnet_data.py
